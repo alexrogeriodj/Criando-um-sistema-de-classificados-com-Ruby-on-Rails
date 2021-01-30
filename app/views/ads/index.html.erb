@@ -1,0 +1,16 @@
+<h1> <%= @title %> </h1>
+
+<% unless @selling.empty? %><h2> <%= t(:sell).titlecase %> </h2> <% end -%>
+<%= render :partial => 'ad', :collection => @selling %>
+
+<% unless @buying.empty? %><h2> <%= t(:buy).titlecase %> </h2><% end -%>
+<%= render :partial => 'ad', :collection => @buying %>
+
+<% unless @exchanging.empty? %><h2> <%= t(:exchange).titlecase %> </h2><% end -%>
+<%= render :partial => 'ad', :collection => @exchanging %>
+
+<br />
+
+<% content_for :results_summary do %>
+  <%= ads_summary_as_sentence  %>
+<%end%>

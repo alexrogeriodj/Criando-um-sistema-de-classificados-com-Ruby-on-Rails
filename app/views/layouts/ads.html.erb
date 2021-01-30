@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title><%= @title %> - Classificados Online</title>
+  
+  <%= stylesheet_link_tag 'reset-fonts-grids', 'main', "/facebox/facebox.css" %>
+  <%= javascript_include_tag "jquery-1.2.6.js", :defaults, "/facebox/facebox.js" %>
+  
+  <script>
+    jQuery(document).ready(function($) {
+      $('a[rel*=facebox]').facebox()
+    })
+  </script>
+  
+</head>
+<body>
+<div id="doc2" class="yui-t2">
+
+  <div id="hd"> 
+    <%if session[:admin_user]%>
+      <div id="nav">
+          <%= t(:admin) %> | 
+          <%=link_to(t(:edit_categories), categories_path) %> | 
+          <%=link_to(t(:logoff), reset_path) %>
+      </div>
+    <%end%>
+
+    <h1>Classificados Online</h1>  
+  </div>
+  
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+        
+        <p style="color: green"><%= flash[:notice] %></p>
+        <p style="color: red"><%= flash[:error] %></p>
+
+        <div class = "yui-g">
+          <div id = "results_summary" class="yui-u first">
+            <%= yield :results_summary %>
+          </div>
+        
+          <div id="search_box" class = "yui-u">
+            <% form_tag search_ads_path, :method => :get do %>
+              <%= text_field_tag(:query, "", :autocomplete => "off" )%>
+              <%= submit_tag(t("search"))%>
+              <%= observe_field :query, 
+                :url => ajax_results_summary_ads_path,
+                :method => :get,
+                :frequency => 0.50, 
+                :with => 'query' %>
+            <% end %>
+          </div>
+        </div>
+
+        <%= yield %>
+        
+      </div>
+    </div>
+        
+    <div class="yui-b">
+      
+      <ul class = "main_links">
+        <li><%= link_to_unless_current t(:new_ad_plus), new_ad_path %></li>
+      </ul>
+      
+      <h2><%=t :categories %></h2>
+      
+      <ul class = "category_list">
+        <li class = "<%= "current" if current_page?(root_path)%>" >
+          <% link_to root_path do %>
+            <%= image_tag "clock-icon.png"%>
+            <span> <%= t :latest %></span>
+          <%end%>
+        </li>
+      <% for category, count in @categories_for_display %>
+        <li class = "<%= "current" if current_page?(ads_in_category_path(category))%>">
+          <% link_to ads_in_category_path(category) do %>
+            <%= image_tag category.photo.url(:tiny) %>
+            <span><%= category.name + " (#{count})"%> </span>
+          <% end %>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+  
+  <div id="ft"> </div>
+  
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+  <div class="ad">
+    <div class="ad_header yui-ge">
+      <div class="ad_title yui-u first"><a name="<%=ad.id%>"><%=h ad.title %></a></div>
+      <div class="yui-u">
+        <div class = "ad_date" >
+           <%=h time_ago_in_words(ad.created_at) %> <%=t :ago %>
+        </div>
+      </div>
+    </div>
+    <div class="ad_content  yui-ge">
+      <div class="ad_body yui-u first">
+        <%= link_to image_tag(ad.photo.url(:thumb), :class => "ad_photo"), ad.photo.url(:medium) , :rel => "facebox" %>
+        <%=h ad.body %>
+      </div>
+      <div class="ad_info yui-u">
+        <%=h ad.email %><br/>
+        <%=h ad.phone %><br/>
+        <%= image_tag ad.category.photo.url(:tiny), :class => "category_photo"%>
+      </div>      
+    </div>
+    <div class="ad_footer  yui-ge">
+      <div class = "ad_options  yui-u first">
+        <% if can_edit? %>
+          <%= link_to t(:edit), edit_ad_path(ad) %> 
+          <%= link_to t(:remove), ad, :confirm => t(:are_you_sure), :method => :delete %>
+        <% end %>
+      </div>
+      <div class = "ad_category yui-u" >
+        <%= link_to(ad.category.name, ads_in_category_path(ad.category) ) %>   
+      </div>
+    </div>
+    
+  </div>

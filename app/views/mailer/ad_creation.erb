@@ -1,0 +1,9 @@
+<%= t "email.congratulations", :title => @ad.title, :type => t(@ad.kind), :category => @ad.category.name %>
+
+<%= t "email.where_is_it", 
+  :category_link => ads_in_category_url(@ad.category, :anchor => @ad.id), 
+  :start_date => l(@ad.created_at, :format => :short)
+%>
+
+<%= t "email.edit_link" %>
+<%= email_edit_ad_url @ad, :secret_code => @ad.secret_code %>
